@@ -12,7 +12,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // automatic incrementation the value of ID
     private Long id;
 
-    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE") // time without time zone utc
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE") // to be saved with a UTC time
     private Instant moment;
     private OrderStatus status;
 
@@ -21,11 +21,15 @@ public class Order {
     // the name has to be the same of attribute bellow
     private User client;
 
-    public Order(Long id, Instant moment, OrderStatus status, User client) {
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private Payment payment;
+
+    public Order(Long id, Instant moment, OrderStatus status, User client, Payment payment) {
         this.id = id;
         this.moment = moment;
         this.status = status;
         this.client = client;
+        this.payment = payment;
     }
 
     public Long getId() {
@@ -58,5 +62,13 @@ public class Order {
 
     public void setClient(User client) {
         this.client = client;
+    }
+
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
     }
 }
