@@ -9,7 +9,7 @@ import jakarta.persistence.Table;
 @Table(name = "tb_order_item")
 public class OrderItem {
 
-    @EmbeddedId
+    @EmbeddedId // attribute is an embedded object within the entity, but is not a primary key
     private OrderItemPK id = new OrderItemPK();
 
     private Integer quantity;
@@ -18,6 +18,7 @@ public class OrderItem {
     public OrderItem() {
     }
 
+    // using order and product to not expose the OrderItemPK
     public OrderItem(Order order, Product product, Integer quantity, Double price) {
         id.setOrder(order);
         id.setProduct(product);
@@ -25,10 +26,12 @@ public class OrderItem {
         this.price = price;
     }
 
+    // getting the order through the id attribute, which is an OrderItemPk
     public Order getOrder() {
         return id.getOrder();
     }
 
+    // setting the order through the id attribute, which is an OrderItemPk
     public void setOrder(Order order) {
         id.setOrder(order);
     }

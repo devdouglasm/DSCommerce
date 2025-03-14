@@ -4,7 +4,8 @@ import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
-@Embeddable
+@Embeddable // attribute is a composite primary key, a key that is formed by two or more fields
+// in this case, the id_order and id_product
 public class OrderItemPK {
 
     @ManyToOne

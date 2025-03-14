@@ -6,7 +6,6 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Entity // marking as an entity
 @Table(name = "tb_order") // creating a table in db with a name "tb_order"
