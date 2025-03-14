@@ -3,6 +3,10 @@ package com.devdouglasm.DCCommerce.entities;
 import jakarta.persistence.*;
 
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity // marking as an entity
 @Table(name = "tb_order") // creating a table in db with a name "tb_order"
@@ -23,6 +27,9 @@ public class Order {
 
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Payment payment;
+
+    @OneToMany(mappedBy = "id.order")
+    private Set<OrderItem> items = new HashSet<>();
 
     public Order(Long id, Instant moment, OrderStatus status, User client, Payment payment) {
         this.id = id;
@@ -71,4 +78,13 @@ public class Order {
     public void setPayment(Payment payment) {
         this.payment = payment;
     }
+
+    public Set<OrderItem> getItems() {
+        return items;
+    }
+
+    public List<Product> getProducts() {
+        return items.stream().map(x -> x.getProduct()).toList();
+    }
+
 }
