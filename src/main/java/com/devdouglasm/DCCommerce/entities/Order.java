@@ -12,7 +12,7 @@ import java.util.Set;
 @Table(name = "tb_order") // creating a table in db with a name "tb_order"
 public class Order {
 
-    @Id// marking as an ID
+    @Id // marking as an ID
     @GeneratedValue(strategy = GenerationType.IDENTITY) // automatic incrementation the value of ID
     private Long id;
 
