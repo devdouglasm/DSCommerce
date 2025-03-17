@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,5 +29,10 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<ProductDTO> insert(@RequestBody ProductDTO dto) { // body that came in json is the product dto
         return new ResponseEntity<>(service.insert(dto), HttpStatus.CREATED);
+    }
+
+    @PutMapping(value = "/{id}")                   // id is necessary to update a specific product
+    public ResponseEntity<ProductDTO> update(@PathVariable Long id, @RequestBody ProductDTO dto) { // body that came in json is the product dto
+        return new ResponseEntity<>(service.update(id, dto), HttpStatus.OK);
     }
 }

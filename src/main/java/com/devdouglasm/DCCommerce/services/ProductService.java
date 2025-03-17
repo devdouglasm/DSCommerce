@@ -35,16 +35,30 @@ public class ProductService {
 
         // instantiates a new product to save in db
         Product product = new Product();
-        // copy the attributes from received dto and set to new product
-        product.setName(dto.getName());
-        product.setDescription(dto.getDescription());
-        product.setPrice(dto.getPrice());
-        product.setImgUrl(dto.getImgUrl());
-
+        copyDtoToEntity(dto, product);
         // save the new product in db
         product = repository.save(product);
         // make the product dto again, and return it
         return new ProductDTO(product);
+    }
 
+    @Transactional
+    public ProductDTO update(Long id, ProductDTO dto) {
+
+        // instantiates a new product just with id reference, the variable doesn't go in db
+        Product product = repository.getReferenceById(id);
+        copyDtoToEntity(dto, product);
+        // save the new product in db
+        product = repository.save(product);
+        // make the product dto again, and return it
+        return new ProductDTO(product);
+    }
+
+    private void copyDtoToEntity(ProductDTO dto, Product entity) {
+        // copy the attributes from received dto and set to new product
+        entity.setName(dto.getName());
+        entity.setDescription(dto.getDescription());
+        entity.setPrice(dto.getPrice());
+        entity.setImgUrl(dto.getImgUrl());
     }
 }
