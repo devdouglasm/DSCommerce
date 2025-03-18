@@ -18,7 +18,7 @@ public class ProductController {
 
     @GetMapping(value = "/{id}") // find by id in the url path
     public ResponseEntity<ProductDTO> findById(@PathVariable Long id) {
-        return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
+            return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
     }
 
     @GetMapping

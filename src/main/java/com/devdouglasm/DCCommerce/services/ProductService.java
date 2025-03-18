@@ -3,13 +3,16 @@ package com.devdouglasm.DCCommerce.services;
 import com.devdouglasm.DCCommerce.dto.ProductDTO;
 import com.devdouglasm.DCCommerce.entities.Product;
 import com.devdouglasm.DCCommerce.repositories.ProductRepository;
+import com.devdouglasm.DCCommerce.services.exception.DatabaseException;
+import com.devdouglasm.DCCommerce.services.exception.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -18,9 +21,8 @@ public class ProductService {
     private ProductRepository repository;
 
     @Transactional(readOnly = true) // when the method just show anything from db, and doesn't change anything
-    public ProductDTO findById(Long id) {
-        Optional<Product> result = repository.findById(id);
-        Product product = result.get();
+    public ProductDTO findById(Long id) {   // findById method already has orElseThrow exception
+        Product product = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Resource not found"));
         return new ProductDTO(product);
     }
 
@@ -45,18 +47,31 @@ public class ProductService {
     @Transactional
     public ProductDTO update(Long id, ProductDTO dto) {
 
-        // instantiates a new product just with id reference, the variable doesn't go in db
-        Product product = repository.getReferenceById(id);
-        copyDtoToEntity(dto, product);
-        // save the new product in db
-        product = repository.save(product);
-        // make the product dto again, and return it
-        return new ProductDTO(product);
+        try {
+            // instantiates a new product just with id reference, the variable doesn't go in db
+            Product product = repository.getReferenceById(id);
+            copyDtoToEntity(dto, product);
+            // save the new product in db
+            product = repository.save(product);
+            // make the product dto again, and return it
+            return new ProductDTO(product);
+        }
+        catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("Resource not found");
+        }
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.SUPPORTS) // don't execute transactional mode if it calls alone
     public void delete(Long id) {
-        repository.deleteById(id);
+        if (!repository.existsById(id)) {
+            throw new ResourceNotFoundException("Resource not found");
+        }
+        try {
+            repository.deleteById(id);
+        }
+        catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Referencial violation");
+        }
     }
 
     private void copyDtoToEntity(ProductDTO dto, Product entity) {
