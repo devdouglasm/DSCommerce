@@ -1,12 +1,22 @@
 package com.devdouglasm.DCCommerce.dto;
 
 import com.devdouglasm.DCCommerce.entities.Product;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 public class ProductDTO {
 
     private Long id;
+
+    @Size(min = 3, max = 80, message = "Must be between 3 and 80 characters")
+    @NotBlank(message = "Required field")
     private String name;
+
+    @Size(min = 10, message = "At least 10 characters")
     private String description;
+
+    @Positive(message = "Must be greater than 0")
     private Double price;
     private String imgUrl;
 
