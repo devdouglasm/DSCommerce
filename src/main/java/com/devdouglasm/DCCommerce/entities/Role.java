@@ -2,7 +2,9 @@ package com.devdouglasm.DCCommerce.entities;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_role")
@@ -13,6 +15,9 @@ public class Role {
     private Long id;
 
     private String authority;
+
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> users = new HashSet<>();
 
     public Role() {
     }
