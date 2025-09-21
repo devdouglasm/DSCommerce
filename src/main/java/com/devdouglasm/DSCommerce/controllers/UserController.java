@@ -1,7 +1,6 @@
 package com.devdouglasm.DSCommerce.controllers;
 
 import com.devdouglasm.DSCommerce.dto.UserDTO;
-import com.devdouglasm.DSCommerce.entities.User;
 import com.devdouglasm.DSCommerce.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
