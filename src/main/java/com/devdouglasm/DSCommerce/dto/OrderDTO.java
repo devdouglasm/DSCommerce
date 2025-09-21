@@ -3,6 +3,7 @@ package com.devdouglasm.DSCommerce.dto;
 import com.devdouglasm.DSCommerce.entities.Order;
 import com.devdouglasm.DSCommerce.entities.OrderItem;
 import com.devdouglasm.DSCommerce.entities.OrderStatus;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -16,7 +17,12 @@ public class OrderDTO {
 
     private ClientDTO client;
     private PaymentDTO payment;
+
+    @NotEmpty(message = "A lista de itens não pode ser vazia")
     private List<OrderItemDTO> items = new ArrayList<>();
+
+    public OrderDTO() {
+    }
 
     public OrderDTO(long id, Instant moment, OrderStatus status, ClientDTO client, PaymentDTO payment) {
         this.id = id;
